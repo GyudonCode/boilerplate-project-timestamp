@@ -27,7 +27,8 @@ app.get("/api/hello", function (req, res) {
 //date now 
 app.get("/api", function(req, res){
   let dateNow = new Date();
-  res.json({unix: Math.floor(dateNow.getTime() / 1000), utc: dateNow.toUTCString()});
+  //res.json({unix: Math.floor(dateNow.getTime() / 1000), utc: dateNow.toUTCString()});
+  res.json({unix: dateNow.getTime(), utc: dateNow.toUTCString()});
 });
 
 //date conversions
@@ -39,17 +40,20 @@ app.get("/api/:date", function(req, res){
     //console.log("regular date : " + req.params.date);
     let clientDate = new Date(req.params.date);
     //console.log("clientDate: " + clientDate);
-    res.json({unix: Math.floor(clientDate.getTime() / 1000), utc: clientDate.toUTCString()});
+    res.json({unix: clientDate.getTime(), utc: clientDate.toUTCString()});
   }
 
   //----- UNIX Timestamp format -----------
   const ALL_NUMBERS_REGEX = /^[\d]*$/g;
 
   if (ALL_NUMBERS_REGEX.test(req.params.date)){
-    console.log('All numbers : ' + req.params.date)
-    let clientDate = new Date(Math.floor(req.params.date * 1000));
-    console.log('date conversion : ' + clientDate);
-    res.json({unix: req.params.date, utc: clientDate.toUTCString()});
+    //console.log('All numbers : ' + req.params.date)
+    //let clientDate = new Date(Math.floor(req.params.date * 1000));
+    //let clientDate = new Date(req.params.date);
+    let msDate = Number(req.params.date);
+    let clientDate = new Date(msDate);
+    //console.log('date conversion : ' + clientDate);
+    res.json({unix: msDate, utc: clientDate.toUTCString()});
   }else{
   //------- invalids like "34gt" -----------
     res.json({error: "Invalid Date"});
