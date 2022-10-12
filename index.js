@@ -10,6 +10,12 @@ var app = express();
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
+//middleware to get FCC test URL's 
+app.use("/", function(req, res, next){
+  console.log(req.path + " " + req.ip);
+  next();
+});
+
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
