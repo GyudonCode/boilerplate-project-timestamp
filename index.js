@@ -33,35 +33,28 @@ app.get("/api", function(req, res){
 
 //date conversions
 app.get("/api/:date", function(req, res){  
-  //------ Date format YYYY-MM-DD ----------
-  const REGULAR_DATE_REGEX = /[\d]*-/g;
+  const clientDate = req.params.date;  
+  const YYYYMMDD_REGEX = /[\d]*-/g 
+  let date;
 
-  if (REGULAR_DATE_REGEX.test(req.params.date)){
-    //console.log("regular date : " + req.params.date);
-    let clientDate = new Date(req.params.date);
-    //console.log("clientDate: " + clientDate);
-    res.json({unix: clientDate.getTime(), utc: clientDate.toUTCString()});
+  if (YYYYMMDD_REGEX.test(clientDate)){
+    //YYYY-MM-DD date 
+    date = new Date(clientDate);
+
+  } else {
+    //unix timestamp
+    date = new Date(Number(clientDate));
   }
 
-  //----- UNIX Timestamp format -----------
-  const ALL_NUMBERS_REGEX = /^[\d]*$/g;
-
-  if (ALL_NUMBERS_REGEX.test(req.params.date)){
-    //console.log('All numbers : ' + req.params.date)
-    //let clientDate = new Date(Math.floor(req.params.date * 1000));
-    //let clientDate = new Date(req.params.date);
-    let msDate = Number(req.params.date);
-    let clientDate = new Date(msDate);
-    //console.log('date conversion : ' + clientDate);
-    res.json({unix: msDate, utc: clientDate.toUTCString()});
-  }else{
-  //------- invalids like "34gt" -----------
-    res.json({error: "Invalid Date"});
-  }
+  if (date == "Invalid Date"){
+    res.json({ error: "Invalid Date" }); 
+  } else {
+    res.json({ unix: date.getTime(), utc: date.toUTCString() });
+  }  
 });
 
 
-// listen for requests :)
+// listen starts the server in a given port 
 //var listener = app.listen(process.env.PORT, function () {
 let listener = app.listen(3000, function() {
   console.log('Your app is listening on port ' + listener.address().port);
