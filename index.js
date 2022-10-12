@@ -41,13 +41,15 @@ app.get("/api", function(req, res){
 app.get("/api/:date", function(req, res){  
   const clientDate = req.params.date;  
   const YYYYMMDD_REGEX = /[\d]*-/g 
-  let date;
+  const UNIX_REGEX = /^[\d]*$/g
+  
+  let date = new Date(clientDate);
 
   if (YYYYMMDD_REGEX.test(clientDate)){
     //YYYY-MM-DD date 
     date = new Date(clientDate);
 
-  } else {
+  } else if (UNIX_REGEX.test(clientDate)){
     //unix timestamp
     date = new Date(Number(clientDate));
   }
